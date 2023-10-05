@@ -19,7 +19,8 @@ public class Main {
            count = in.nextDouble();
 
            double sum = price * count; // 물건 개수 * 가격
-           total_sum+=sum;
+           
+           total_sum+=sum; // 각 항목의 값을 총 계산 금액에 더해 누적해가기
            n--;
        }
 
