@@ -7,7 +7,7 @@ public class Main {
         int n = in.nextInt(); // 정수 개수 입력 받기
 
         Vector<Integer> array = new Vector<>();
-        for(int i = 0; i < n; i++){
+        for(int i = 0; i < n; i++){ //벡터 채우기
             int a = in.nextInt();
             array.add(a);
         }
