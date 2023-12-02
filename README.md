@@ -1,13 +1,9 @@
-# JavaStudy
-자바를 자바보자📚
+# JavaStudy : 자바를 자바보자🍵
+### ✅ 백준
+### ✅ SW Expert Academy
+### ✅ 프로그래머스
+<br></br>
+## 📖 배운 내용 기록하기
+### [🔗 YouJungJang.tistory](https://yuejeong.tistory.com/category/Algorithm/JAVA)
+<br></br>
 
-
-## Study Blog
-### [YouJungJang.tistory](https://yuejeong.tistory.com/category/Algorithm/JAVA)
-
-백준 단계별 학습으로 매일 1일 1커밋🌱
-
-새로 알게된 내용 매일 1일 1이슈📝
-
-프로그래머스 1단계 - 2단계
-SW Expert Academy d1-d3
