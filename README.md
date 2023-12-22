@@ -1,4 +1,4 @@
-# JavaStudy : 자바를 자바보자🍵
+# JavaStudy : 꾸준히 공부하는 자바☕️
 ### ✅ 백준
 ### ✅ SW Expert Academy
 ### ✅ 프로그래머스
