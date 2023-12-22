@@ -2,8 +2,6 @@
 ### ✅ 백준
 ### ✅ SW Expert Academy
 ### ✅ 프로그래머스
-<br></br>
-## 📖 공부 블로그
-### [🔗 YouJungJang.tistory](https://yuejeong.tistory.com/category/Algorithm/JAVA)
+### 📖 공부 블로그: [🔗 YouJungJang.tistory](https://yuejeong.tistory.com/category/Algorithm/JAVA)
 <br></br>
 
