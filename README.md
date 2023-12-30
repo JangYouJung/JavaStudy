@@ -1,4 +1,4 @@
-## JAVA STUDY : 꾸준히 공부하는 자바☕️
+## JAVA STUDY : 꾸준히 공부하는 자바 ☕️
 ### 🌱 BaekJoon
 ### 🌱 SW Expert Academy
 ### 🌱 Programmers
