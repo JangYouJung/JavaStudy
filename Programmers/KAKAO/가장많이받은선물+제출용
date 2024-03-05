@@ -1,0 +1,86 @@
+import java.util.*;
+
+
+class Solution {
+    static int[][] giftRecordList;                 // 받은 선물 개수 나타내는 다차원 배열
+
+    static Map<String,Integer> giftQuotientMap;    // 각 사용자의 선물 지수
+
+    static Map<String,Integer> giftPredictedMap;             // 각 사용자가 다음 달에 받을 선물 개수
+
+
+    public int solution(String[] friends, String[] gifts) {
+
+        List<String> friendsList = Arrays.asList(friends);
+
+        // 선물 기록 리스트 초기화
+        giftRecordList = new int[friends.length][friends.length];
+
+        // 선물 지수 맵 초기화
+        giftQuotientMap = new HashMap<>();
+        for( String friend : friends ) giftQuotientMap.put(friend, 0);
+
+        // 다음 달에 받을 선물 개수 맵 초기화
+        giftPredictedMap = new HashMap<>();
+        for( String friend : friends ) giftPredictedMap.put( friend, 0 );
+
+
+        for( String gift : gifts ){
+
+            // [1] 문자열 띄어쓰기 기준으로 나누기
+            String[] result = gift.split(" ");
+
+
+            // [2] 선물 지수 값 갱신하기
+            int giver = giftQuotientMap.get( result[0] );        // 선물 준 사람은 +1
+            giftQuotientMap.replace( result[0], giver + 1 );
+
+            int receiver = giftQuotientMap.get( result[1] );     //  선물 받은 사람은 -1
+            giftQuotientMap.replace( result[1], receiver - 1 );
+
+
+            // [3]  선물 받은 개수 리스트 값 갱신하기
+            int giverIndex = friendsList.indexOf(result[0]);
+            int receiverIndex = friendsList.indexOf(result[1]);
+            giftRecordList[giverIndex][receiverIndex] += 1 ;
+
+        }
+
+
+        // 다음 달에 받을 선물 개수 계산하기
+        for( String friend : friends ){
+            for( int i = 0; i < friends.length; i++ ){
+
+                int friendIndex = friendsList.indexOf(friend);
+                String targetFriend = friendsList.get(i);       // 비교 대상인 상대방
+                boolean deserve = false;
+
+                if(friendIndex == i) continue;      // 본인 제외
+                else if(giftRecordList[friendIndex][i] > giftRecordList[i][friendIndex]){
+                    // 내가 준 선물 개수가 더 많을 경우 내가 받을 선물 개수 갱신
+                    deserve = true;
+
+                }
+                else if ( giftRecordList[friendIndex][i] == giftRecordList[i][friendIndex]){
+                    // 서로 주고 받은 선물 개수가 같거나 없는 경우 선물 지수 비교하기
+
+                    if(giftQuotientMap.get(friend) > giftQuotientMap.get(targetFriend)){
+                        // 내 선물 지수가 더 클 경우 경우 내가 받을 선물 개수 갱신
+                        deserve = true;
+
+                    }
+                }
+
+                if(deserve){
+                    int giftCnt = giftPredictedMap.get( friend );
+                    giftPredictedMap.replace( friend,giftCnt + 1 );
+                }
+
+            }
+        }
+
+        // 최대값 리턴하기
+        return Collections.max(giftPredictedMap.values());
+
+    }
+}
