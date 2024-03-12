@@ -1,0 +1,70 @@
+import java.util.Scanner;
+
+public class Main {
+    static int[][] relations;
+    static int[] kevinBaconQuotient;
+    static final int INF = 9999999;
+
+    public static void main(String[] args) {
+
+        Scanner in = new Scanner(System.in);
+        int N = in.nextInt();    // 유저의 수
+        int M = in.nextInt();    // 친구 관계의 수
+
+        relations = new int[N][N];
+        kevinBaconQuotient = new int[N];
+
+        for( int i = 0; i < N; i++ ){
+            for( int j = 0; j < N; j++ ){
+                if( i == j ) relations[i][j] = 0;
+                else relations[i][j] = INF;
+            }
+        }
+
+        for (int i = 0; i < M; i++) {       // 주어진 친구 관계를 바탕으로 친구 리스트 채우기
+            int a = in.nextInt();
+            int b = in.nextInt();
+
+            relations[a-1][b-1] = 1;
+            relations[b-1][a-1] = 1;
+        }
+
+
+        for(int k = 0; k < N; k++ ){            // 플로이드와샬 알고리즘으로 구현한 최소 경로 찾기
+            for( int i = 0; i < N; i++){
+                for( int j = 0; j < N; j++){
+                    if( relations[i][j] > relations[i][k] + relations[k][j] ){
+                        relations[i][j] = relations[i][k] + relations[k][j];
+                    }
+                }
+            }
+        }
+
+        // 출력문
+        for( int i = 0; i < N; i++){
+            for( int j = 0; j < N; j++){
+                System.out.print(relations[i][j] + " ");
+            }
+            System.out.println();
+        }
+
+        for( int i = 0; i < N; i++){
+            int sum = 0;
+            for( int j = 0; j < N; j++){
+                sum += relations[i][j];
+            }
+            kevinBaconQuotient[i] = sum;
+        }
+
+        int minIndex = N + 1;
+        int minKevinBacon = INF;
+        for( int i = 0; i < N; i++ ){
+            if( kevinBaconQuotient[i] < minKevinBacon ) {
+                minKevinBacon = kevinBaconQuotient[i];
+                minIndex = i + 1;
+            }
+        }
+        System.out.println(minIndex);
+    }
+}
+
