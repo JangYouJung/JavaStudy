@@ -1,0 +1,87 @@
+mport java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Main {
+
+    static ArrayList<ArrayList<Integer>> relations = new ArrayList<>();
+
+    public static void main(String[] args) {
+
+        Scanner in = new Scanner(System.in);
+        int N = in.nextInt();    // 유저의 수
+        int M = in.nextInt();    // 친구 관계의 수
+
+        for( int i = 1; i < N + 1; i++ ){   // 관계 리스트 초기화
+            ArrayList<Integer> friendList = new ArrayList<>();
+            friendList.add(i);
+            relations.add(friendList);
+        }
+
+        for( int i = 0; i < M; i++ ){       // 주어진 친구 관계를 바탕으로 친구 리스트 채우기
+            int a = in.nextInt();
+            int b = in.nextInt();
+
+            ArrayList<Integer> AFriendList = relations.get(a-1);
+            ArrayList<Integer> BFriendList = relations.get(b-1);
+
+            AFriendList.add(b);
+            BFriendList.add(a);
+
+            relations.set(a-1, AFriendList);
+            relations.set(b-1, BFriendList);
+        }
+
+        int[] baconQuotient = new int[N];          // 케빈 베이컨 지수 리스트
+        ArrayList<ArrayList<Integer>> friendLevel = new ArrayList<>();
+
+        for( int i = 1; i < N + 1; i++ ){
+
+
+            ArrayList<Integer> minLevel = new ArrayList<>();         // 각 유저와의 단계 최솟값
+            for ( int j = 1; j < N + 1; j++ ) minLevel.add(0);
+
+            minLevel.set( i-1 , 0 );  // 본인은 단계 0 으로 세팅
+
+            for( int j = 1; j < N + 1; j++ ){
+                boolean[] visitCheck = new boolean[N];     // 방문 여부
+                Arrays.fill(visitCheck,false);
+                visitCheck[i-1] = true; // 본인은 true
+
+                if( i == j ) continue;
+                if( friendLevel.get(j-1).get(i-1) != 0 ) {
+                    minLevel.set( j-1 , friendLevel.get(j-1).get(i-1) );
+                    continue;
+                }
+                else baconQuotient[i-1] += getBaconQuotient(i, j, visitCheck );
+
+            }
+            System.out.println(baconQuotient[i-1]);
+        }
+    }
+
+    static int getBaconQuotient(    // 유저가 타겟 유저를 몇 단계만에 알 수 있는지 구하는 메서드
+            int n,                  // 유저
+            int target,             // 타켓 유저
+            //int level,              // 누적된 친구 수
+            boolean[] visitCheck    // 방문 여부 체크 리스트
+            //ArrayList<Integer> minLevel,
+    ){
+
+        if(relations.get(n-1).contains(target)){
+            return 1;
+        }
+        else{
+            int minLevel = 101;
+            for( int friend : relations.get(n-1)){
+                if(!visitCheck[friend - 1]){
+                    visitCheck[friend -1] = true;
+                    int level = 1 + getBaconQuotient( friend , target, visitCheck); // 한번도 방문하지 않은 사용자면 방문하기
+                    if(level < minLevel) return level;
+                }
+                else return 0;
+            }
+        }
+    }
+}
+
