@@ -11,15 +11,12 @@ class Solution {
 
         for( int i = 0; i < 5; i++ ){
             waitingRoom = new String[5][5];
-
             for( int j = 0; j < 5; j++){
                 String[] line = places[i][j].split("");
-
                 for( int k = 0; k < 5; k++ ){
                     waitingRoom[j][k] = line[k];
                 }
             }
-
             answer[i] = checkDistance(waitingRoom);
         }
 
@@ -31,8 +28,6 @@ class Solution {
         for( int i = 0; i < 5; i++ ){
             for( int j = 0; j < 5; j++ ){
                 if( waitingRoom[i][j].equals("P")){
-    
-                    // 해당 유저 주위에 다른 유저 있는지 체크
                     //[1] 십자가 방향으로 +-1 주위의 유저 체크
                     int[][] crossOneCheck = crossOne;
 
@@ -40,8 +35,7 @@ class Solution {
                         int x = coordinate[0] + i;
                         int y = coordinate[1] + j;
 
-                        if( x < 0 | y < 0 ) continue;
-                        if( x > 4 | y > 4 ) continue;
+                        if( x < 0 || y < 0 || x > 4 || y > 4 ) continue;
 
                         // 십자가 방향 유저 한 명이라도 있으면 0 리턴
                         if(waitingRoom[x][y].equals("P")) return 0;
@@ -55,17 +49,14 @@ class Solution {
                         int x = coordinate[0] + i;
                         int y = coordinate[1] + j;
 
-                        if( x < 0 | y < 0 ) continue;
-                        if( x > 4 | y > 4 ) continue;
+                        if( x < 0 || y < 0 || x > 4 || y > 4 ) continue;
 
                         // 십자가 방향 유저 있으면 사이에 가림막 없을 경우 0 리턴
-                        if(waitingRoom[x][y].equals("P")){                
-                            if(x == i){
-                                if(!waitingRoom[x][(j+y)/2].equals("X")) return 0;
+                        if(waitingRoom[x][y].equals("P")){
+                            if(x == i) {
+                                if (!waitingRoom[x][(j + y) / 2].equals("X")) return 0;
                             }
-                            else{
-                                if(!waitingRoom[(i+x)/2][y].equals("X")) return 0;
-                            }
+                            else if(!waitingRoom[(i+x)/2][y].equals("X")) return 0;
                         }
 
                     }
@@ -77,8 +68,7 @@ class Solution {
                         int x = coordinate[0] + i;
                         int y = coordinate[1] + j;
 
-                        if( x < 0 | y < 0 ) continue;
-                        if( x > 4 | y > 4 ) continue;
+                        if( x < 0 || y < 0 || x > 4 || y > 4 ) continue;
 
                         // 십자가 방향 유저 있으면 사이에 가림막 없을 경우 0 리턴
                         if(waitingRoom[x][y].equals("P")){
