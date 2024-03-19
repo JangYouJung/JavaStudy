@@ -1,0 +1,63 @@
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.OptionalInt;
+import java.util.Scanner;
+
+public class Main {
+    static int MIN_PRICE = 1001;
+
+    static int[] INDEX = {0,1,2};
+
+    public static void main(String[] args) throws IOException {
+
+        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(bf.readLine()); // 집 개수
+
+        int[][] RGB = new int[N][3];
+
+        for( int i = 0; i < N; i++ ){
+            String[] line = bf.readLine().split(" ");
+
+            int[] colors = new int[3];
+            for( int j = 0; j<3; j++ ){
+                colors[j] = Integer.parseInt(line[j]);
+            }
+            RGB[i] = colors;
+        }
+
+        int minSum = 1000001;
+        for( int i = 0 ; i < 3; i++ ){
+            int sum = RGB[0][i];
+            int lastIndex = 0;
+            int result = getMinPrice(sum, N, lastIndex, RGB);
+
+            if(result<minSum) minSum = result;
+        }
+        System.out.println(minSum);
+
+    }
+
+    public static int getMinPrice(int sum, int N, int lastIndex, int[][] RGB){
+
+        for( int i = 1; i < N; i++ ){
+            int min = MIN_PRICE;
+
+            for( int j : INDEX){
+
+                if( lastIndex == j ) continue;
+                else if( RGB[i][j] < min ){
+                    lastIndex = j;
+                    min = RGB[i][j];
+                }
+
+            }
+            sum += min;
+        }
+
+        return sum;
+    }
+}
+
