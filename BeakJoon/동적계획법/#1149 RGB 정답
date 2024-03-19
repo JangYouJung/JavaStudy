@@ -1,0 +1,55 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+
+public class Main {
+
+    static int[][] price;
+    static int[][] dp;
+
+    static final int Red = 0;
+    static final int Green = 1;
+    static final int Blue = 2;
+
+
+    public static void main(String[] args) throws IOException {
+
+        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(bf.readLine()); // 집 개수
+
+        price = new int[N][3];
+        dp = new int[N][3];
+        StringTokenizer st;
+
+        for(int i = 0; i<N; i++){
+            st = new StringTokenizer(bf.readLine(), " ");
+            price[i][Red] = Integer.parseInt(st.nextToken());
+            price[i][Green] = Integer.parseInt(st.nextToken());
+            price[i][Blue] = Integer.parseInt(st.nextToken());
+        }
+
+        dp[0][Red] = price[0][Red];
+        dp[0][Green] = price[0][Green];
+        dp[0][Blue] = price[0][Blue];
+
+
+        System.out.println(Math.min(Math.min(RGB(N-1,Red),RGB(N-1,Green)),RGB(N-1,Blue)));
+
+
+    }
+
+    public static int RGB( int N, int color ){
+
+        if( dp[N][color] == 0 ){ // dp가 초기값일 경우 누적 진행
+            if( color == Red ) dp[N][color] = Math.min( RGB(N-1,Green), RGB(N-1,Blue)) + price[N][Red];
+            if( color == Green ) dp[N][color] = Math.min( RGB(N-1,Red), RGB(N-1,Blue))+ price[N][Green];
+            if( color == Blue ) dp[N][color] = Math.min( RGB(N-1,Green), RGB(N-1,Red))+ price[N][Blue];
+        }
+
+        return dp[N][color];
+    }
+
+}
+
