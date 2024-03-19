@@ -1,0 +1,61 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
+class Solution {
+    public int[] solution(String[][] places) {
+
+        int[] answer = new int[5];
+
+        for( int i = 0; i < 5; i++ ){
+            boolean check = true;
+            String[] waitingRoom = places[i];
+            for( int r = 0; r < 5; r++ ){
+                for( int c = 0; c < 5; c++ ){
+                    if(waitingRoom[r].charAt(c)=='P'){
+                        if(!bfs(r,c,waitingRoom)){
+                            check = false;
+                            break;
+                        }
+                    }
+                }
+                if(!check) break;
+            }
+            answer[i] = check ? 1 : 0;
+        }
+        return answer;
+    }
+
+    public boolean bfs( int or, int oc, String[] waitingRoom ){
+        // or: original row, oc: original column
+        System.out.println("bfs");
+
+        int[] x = { 0, 1, 0, -1 };
+        int[] y = { 1, 0, -1, 0 };
+
+        Queue<int[]> searchQueue = new LinkedList<>();
+        searchQueue.offer(new int[]{or, oc});
+
+        while(!searchQueue.isEmpty()){
+            int[] search = searchQueue.poll();
+
+            for(int i = 0 ; i < 4; i++ ){
+                int r = search[0] + x[i];
+                int c = search[1] + y[i];
+
+                int bc = Math.abs(or-r) + Math.abs(oc-c);
+
+                if( r<0 || c<0 || r>4 || c>4 || ( r==or && c==oc )) continue;
+
+                if( waitingRoom[r].charAt(c)=='P' && bc <= 2 ) {
+                    return false;
+                }
+
+                if( waitingRoom[r].charAt(c)=='O' && bc < 2 ) {
+                    searchQueue.offer( new int[]{r,c} );
+                }
+            }
+        }
+
+        return true;
+    }
+}
