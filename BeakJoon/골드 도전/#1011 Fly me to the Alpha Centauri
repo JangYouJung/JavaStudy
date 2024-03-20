@@ -1,0 +1,50 @@
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+
+public class Main {
+
+    public static void main(String[] args) throws IOException {
+
+        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(bf.readLine()); // 테스트 케이스 개수
+
+        StringTokenizer st;
+        for( int i = 0; i<N; i++ ){
+            st = new StringTokenizer(bf.readLine()," ");
+
+            long X = Long.parseLong(st.nextToken());
+            long Y = Long.parseLong(st.nextToken());
+            int count = 1;
+            long k = 1L;  // k 초기값
+
+            System.out.println(AlphaCentauri( X+1 , Y, k, count ));
+
+        }
+    }
+
+    public static int AlphaCentauri( long X, long Y, long k ,int count ){
+
+        while( X != Y ){
+
+            long S = k * ( k + 1 ) / 2;              // 기존 k
+            long newS =  ( k + 1 ) * ( k + 2 ) / 2;  // k를 1 늘릴 경우
+
+            if(( Y - X ) >= newS) {  // k를 하나 늘려도 되는 상황
+                k++;
+            }
+            else if(( Y - X ) < S){ // k를 하나 줄여야 하는 상황
+                k--;
+            }
+
+            X += k;
+            count++;
+
+        }
+        return count;
+    }
+}
+
