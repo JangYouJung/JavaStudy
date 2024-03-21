@@ -1,0 +1,80 @@
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+
+
+public class Main {
+    static int[] Time;  // 각 건물 건설 소요 시간
+    static int[][] Sequence;    // 각 건물 넘버 = 인덱스 : 선행 건물의 인덱스 = 1
+    static int[] link; // 선행하는 건물 개수
+    static int destination;
+    static int N;
+    static int K;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+
+        int T = Integer.parseInt(br.readLine());
+
+        while( T > 0 ){
+            st = new StringTokenizer(br.readLine(), " ");
+            N = Integer.parseInt(st.nextToken());   // 건물 개수
+            K = Integer.parseInt(st.nextToken());   // 건설 순서 규칙
+
+            Time = new int[N];
+            st = new StringTokenizer(br.readLine(), " ");
+            for( int i = 0; i < N; i++ ){   // 건물당 걸리는 시간 입력
+                int time = Integer.parseInt(st.nextToken());
+                Time[i] = time;
+            }
+
+            Sequence = new int[N][N];
+            link = new int[N];
+            for( int i = 0; i < K; i++ ){   // 건물 순서 규칙 입력
+                st = new StringTokenizer(br.readLine(), " ");
+                int from = Integer.parseInt(st.nextToken());
+                int to = Integer.parseInt(st.nextToken());
+
+                Sequence[to-1][from-1] = 1;
+                link[to-1] ++;
+            }
+
+            destination = Integer.parseInt(br.readLine());
+            System.out.println(Construction(destination - 1 ));
+
+            T--;
+        }
+    }
+
+    static int Construction( int n ) {
+
+        Queue<Integer> queue = new LinkedList<>(); // 건설하기 큐
+        int[] totalTime = new int[N];
+
+        for( int i = 0; i < N; i++ ){
+            if( link[i] == 0 ){ // 건설 준비 완료 됐다는 의미
+                queue.offer(i); // 건설하기
+                totalTime[i] = Time[i];
+            }
+        }
+
+        while(!queue.isEmpty()){
+            int building = queue.poll();
+
+            for( int i = 0; i < N; i++ ){
+                if( Sequence[i][building] == 1 ){
+                    totalTime[i] = Math.max( totalTime[i], Time[i] + totalTime[building] );
+                    link[i]--;
+
+                    if( link[i]==0 ) queue.offer(i);
+                }
+            }
+        }
+
+        return totalTime[n];
+
+    }
+}
