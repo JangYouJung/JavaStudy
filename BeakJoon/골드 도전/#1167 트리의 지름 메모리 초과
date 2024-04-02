@@ -1,0 +1,64 @@
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
+
+public class Main {
+    static int[][] Tree;
+    static final int INF = 10001;
+    static int N;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+
+        N = Integer.parseInt(bf.readLine());
+        Tree = new int[N][N];
+
+        for( int i = 0; i < N; i++ ){
+            for( int j = 0; j < N; j++ ){
+                if( i == j ) Tree[i][j] = 0;
+                else {
+                    Tree[i][j] = INF;
+                }
+            }
+        }
+
+        for( int i = 0; i < N; i++ ){
+            StringTokenizer st = new StringTokenizer(bf.readLine(), " ");
+            int vertex = Integer.parseInt(st.nextToken());
+
+            while(true){
+                int neighbor = Integer.parseInt(st.nextToken());
+                if( neighbor == -1 ) break;
+
+                int distance = Integer.parseInt(st.nextToken());
+                Tree[ vertex - 1 ][ neighbor - 1 ] = distance;
+            }
+        }
+
+        for( int i = 0; i < N; i++ ){
+            for( int j = 0; j < N; j++ ){
+                for( int k = 0; k < N; k++ ){
+                    if( Tree[i][j] > Tree[i][k] + Tree[k][j]){
+                        Tree[i][j] = Tree[i][k] + Tree[k][j];
+                    }
+                }
+            }
+        }
+
+        int max = 0;
+        for( int i = 0; i < N; i++ ){
+            for( int j = 0; j < N; j++ ){
+                //System.out.print(Tree[i][j] + " ");
+                if( Tree[i][j] > max && Tree[i][j] != INF ){
+                    max = Tree[i][j];
+                }
+            }
+            //System.out.println();
+        }
+
+        System.out.println(max);
+
+
+    }
+}
