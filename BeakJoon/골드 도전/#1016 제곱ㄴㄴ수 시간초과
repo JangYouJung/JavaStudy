@@ -1,0 +1,32 @@
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(bf.readLine(), " ");
+
+        long min = Long.parseLong(st.nextToken());
+        long max = Long.parseLong(st.nextToken());
+        int count = 0;
+
+        for( long i = min; i <= max; i++ ){
+            boolean divided = false;
+
+            for( long j = 2; j * j <= max ; j++ ){
+                if( i % ( j * j ) == 0 ){
+                    divided = true;
+                    break;
+                }
+
+            }
+            if(!divided) count++;
+        }
+
+        System.out.println(count);
+
+    }
+}
