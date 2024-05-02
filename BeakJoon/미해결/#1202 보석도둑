@@ -1,0 +1,47 @@
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
+
+public class Main {
+    static int N; // 보석의 개수
+    static int K; // 가방의 개수
+    //static int[] bags;
+    static int[] price;
+    static int[] weight;
+    static ArrayList<int[][]> bags;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer line = new StringTokenizer(bf.readLine(), " ");
+
+        N = Integer.parseInt(line.nextToken());
+        K = Integer.parseInt(line.nextToken());
+        price = new int[ N + 1 ];
+        weight = new int[ N + 1 ];
+        bags = new ArrayList<>();
+
+        for( int i = 1; i < N + 1 ; i++ ){
+            line = new StringTokenizer(bf.readLine(), " ");
+            weight[i] = Integer.parseInt(line.nextToken()); // 보석 무게
+            price[i] = Integer.parseInt(line.nextToken());  // 보석 가격
+        }
+
+        for( int i = 0; i < K; i++ ){
+            int bag = Integer.parseInt(bf.readLine()); // 가방 무게
+            int[][] array = new int[ N + 1 ][ bag + 1 ];
+            bags.add(array);
+        }
+
+        System.out.println(Arrays.toString(price));
+
+
+
+
+
+
+
+
+    }
+
+}

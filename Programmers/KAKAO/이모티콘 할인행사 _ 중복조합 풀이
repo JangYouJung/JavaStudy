@@ -1,0 +1,56 @@
+class Solution {
+    static int[] rates = { 10, 20, 30 ,40 };
+    static int MAX_JOIN = Integer.MIN_VALUE;
+    static int MAX_SALES = Integer.MIN_VALUE;
+
+    public int[] solution(int[][] users, int[] emoticons) {
+
+        // 최소 할인율 인덱스 찾기 -> 시간 단축
+        int min_discount = Integer.MAX_VALUE;
+        for( int[] user : users ){
+            if( min_discount > user[0] ) min_discount = user[0];
+        }
+
+        // 중복 조합 구하기
+        int[] discount = new int[emoticons.length];
+        combination(0, discount, users, emoticons );
+
+        return new int[] { MAX_JOIN, MAX_SALES };
+    }
+
+    public void combination( int start, int[] discount, int[][] users, int[] emoticons ){ // 중복 조합
+
+        if( start == emoticons.length ){
+            int totalSales = 0;
+            int totalCnt = 0;
+
+            for (int i = 0; i < users.length; i++) {
+                int sale_by_person = 0;
+                for (int j = 0; j < emoticons.length; j++) {
+                    if (discount[j] >= users[i][0]) {
+                        sale_by_person += (emoticons[j] - emoticons[j] * discount[j] / 100);
+                    }
+                }
+                if (sale_by_person >= users[i][1]) {
+                    totalCnt++;
+                } else totalSales += sale_by_person;
+            }
+
+            if (MAX_JOIN == totalCnt && MAX_SALES < totalSales) {
+                MAX_SALES = totalSales;
+            } else if (MAX_JOIN < totalCnt) {
+                MAX_JOIN = totalCnt;
+                MAX_SALES = totalSales;
+            }
+            return;
+
+        }
+
+        for( int i = 0; i < 4; i++ ){
+            discount[start] = rates[i];
+            combination( start + 1, discount, users, emoticons );
+        }
+
+    }
+
+}
