@@ -1,0 +1,50 @@
+import java.util.*;
+class Solution {
+    static int[] dx = { -1, 0, 1, 0 };
+    static int[] dy = { 0, 1, 0, -1 };
+    static boolean[][] visited;
+    static int MAX = Integer.MIN_VALUE;
+    public int solution(int[][] land) {
+
+        visited = new boolean[land.length][land[0].length];
+
+        for( int i = 0; i < land[0].length; i++ ){
+            bfs( i, land );
+        }
+
+        return MAX;
+    }
+
+    public void bfs( int rig, int[][] land ){
+        Queue<int[]> queue = new LinkedList<>();
+        int totalOil = 0;
+
+        for( int i = 0; i < land.length; i++ ){
+            visited[i][rig] = true;
+            queue.offer( new int[]{ i, rig });
+        }
+
+        while(!queue.isEmpty()){
+            int[] current = queue.poll();
+
+            for( int i = 0; i < 4; i++ ){
+                int newX = current[0] + dx[i];
+                int newY = current[1] + dy[i];
+
+                if( newX < 0 || newY < 0 || newX > land.length - 1 ||
+                        newY > land[0].length - 1 || visited[newX][newY] ) continue;
+
+                if( land[newX][newY] == 1 ){ // 석유가 있는 땅이라면
+                    totalOil++;
+                    visited[newX][newY] = true;
+                    queue.offer( new int[]{newX, newY} );
+                }
+            }
+
+        }
+
+
+        if( totalOil > MAX ) MAX = totalOil;
+
+    }
+}
