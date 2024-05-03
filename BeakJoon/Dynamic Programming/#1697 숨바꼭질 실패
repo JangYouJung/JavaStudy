@@ -1,0 +1,64 @@
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
+
+public class Main {
+    static int START;
+    static int END;
+    static int MIN_TIME;
+    static int[] knapsack;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer line = new StringTokenizer(bf.readLine(), " ");
+
+        START = Integer.parseInt(line.nextToken());
+        END = Integer.parseInt(line.nextToken());
+        knapsack = new int[ END * 4 ];
+
+        // 시작점이 0일 경우, start - 1은 어떻게 / 배열에서 0부터 시작점까지 낭비되는 거
+        for( int i = knapsack.length - 1; i >= START - 1; i-- ){
+            if( i >= END ) knapsack[i] = i - END;
+            else if( i > -1 ){
+                knapsack[i] = Math.min(knapsack[i+1], knapsack[i*2]) + 1;
+            }
+        }
+//        for( int i = knapsack.length - 1; i >= START; i-- ){
+//            System.out.println( i + " : " + knapsack[i]);
+//        }
+//        System.out.println("--------------------");
+        for( int i = knapsack.length - 1; i >= START; i-- ){
+            if( i > 0 ) knapsack[i] = Math.min(knapsack[i-1] + 1,knapsack[i]);
+        }
+
+        for( int i = knapsack.length - 1; i >= START; i-- ){
+            System.out.println( i + " : " + knapsack[i]);
+        }
+
+        findRoute(START,0);
+        System.out.println(MIN_TIME);
+
+    }
+
+
+    static void findRoute( int X, int time ){
+        if( X == END ){
+            MIN_TIME = time;
+            return;
+        }
+        if( X == 0 ) findRoute(X + 1, time + 1 );
+        else if( X == START ){ // X가 start라면 start - 1은 고려하지 않기
+            if( knapsack[X+1] > knapsack[X*2] ) {
+                findRoute(X*2, time + 1 );
+            }
+            else findRoute(X + 1, time + 1 );
+        }
+        else{
+            if( knapsack[X+1] >= knapsack[X*2] && knapsack[X-1] >= knapsack[X*2] ) findRoute(X*2, time + 1 );
+            else if( knapsack[X*2] >= knapsack[X+1] && knapsack[X-1] >= knapsack[X+1] ) findRoute(X+1, time + 1 );
+            else findRoute(X-1, time + 1 );
+        }
+
+    }
+}
