@@ -1,0 +1,113 @@
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.lang.reflect.Array;
+import java.util.*;
+
+public class Main {
+    static int[][] city;
+    static int N;
+    static int M;
+    static ArrayList<int[]> chickenJip;
+    static int MIN = Integer.MAX_VALUE;
+
+    static int[] dx = { -1, 0, 1, 0};
+    static int[] dy = { 0, -1, 0, 1};
+
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer line = new StringTokenizer(bf.readLine(), " ");
+
+        N = Integer.parseInt(line.nextToken());
+        M = Integer.parseInt(line.nextToken());
+
+        city = new int[N][N];
+        chickenJip = new ArrayList<>();
+
+        for( int i = 0; i < N; i++ ){
+            line = new StringTokenizer(bf.readLine(), " ");
+            for( int j = 0; j < N; j++ ){
+                int n = Integer.parseInt(line.nextToken());
+                if( n == 2 ) {
+                    chickenJip.add(new int[]{i,j});
+                    city[i][j] = 0;
+                }
+                else city[i][j] = n;
+            }
+        }
+        deleteChickenPlace( 0, 0);
+
+        System.out.println(MIN);
+    }// end of main
+
+    public static void deleteChickenPlace( int start, int count ){
+        if( count == M ){
+//            System.out.println("-------CopyCity-------");
+//            for( int i = 0; i < N; i++ ){
+//                for( int j = 0; j < N; j++ ){
+//                    System.out.print(city[i][j] + " ");
+//                }
+//                System.out.println();
+//            }
+            getChickenDistance();
+            return;
+        }
+
+        for( int i = start; i < chickenJip.size(); i++ ){
+            int[] location = chickenJip.get(i);
+            city[location[0]][location[1]] = 2;
+
+            deleteChickenPlace( i + 1, count + 1);
+            city[location[0]][location[1]] = 0;
+//            System.out.println("count: " + count);
+//            System.out.println("i: "+ i);
+        }
+    }
+
+    public static void getChickenDistance(){
+        int chickenDistance = 0;
+
+        for( int i = 0; i < N; i++ ){
+            for( int j = 0; j < N; j++ ){
+                if( city[i][j] == 1 ){
+                    chickenDistance += bfs(i, j);
+                }
+            }
+        }
+
+        if( MIN > chickenDistance ) MIN = chickenDistance;
+
+    }
+
+    public static int bfs( int r, int c ){
+        Queue<int[]> queue = new LinkedList<>();
+        queue.offer(new int[]{ r, c});
+
+        boolean found = false;
+        int chickenX = 0, chickenY = 0; // 인접한 치킨집 위치
+
+        while(!queue.isEmpty() && !found ){
+            int[] now = queue.poll();
+
+            for( int i = 0; i < 4; i++ ){
+                int newR = now[0] + dx[i];
+                int newC = now[1] + dy[i];
+
+                if( newR < 0 | newC < 0 | newR > (N-1) | newC > (N-1)) continue;
+
+                if( city[newR][newC] == 2){
+                    found = true;
+                    chickenX = newR;
+                    chickenY = newC;
+                    break;
+                }
+                else queue.offer( new int[]{ newR, newC });
+
+            }
+        }
+
+        return Math.abs(r-chickenX) + Math.abs(c-chickenY);
+    }
+
+}// end of class
