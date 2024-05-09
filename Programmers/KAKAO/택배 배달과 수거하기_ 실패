@@ -1,0 +1,70 @@
+import java.util.*;
+class Solution {
+    public long solution(int cap, int n, int[] deliveries, int[] pickups) {
+
+        int distance = 0;
+
+        while(true){
+            boolean finishDelivery = false;
+            boolean finishPickup = false;
+
+            int pickupIndex = n-1, deliveryIndex = n-1;
+
+            for( int i = deliveryIndex; i > -1; i-- ){ // 택배 배달
+                if( deliveries[i] > 0 ){
+                    System.out.println("택배 배달 i: " + i );
+                    deliveryIndex = i;
+
+                    int remain = cap;
+                    remain -= deliveries[i];
+                    deliveries[i] -= cap;
+
+                    for( int j = (i-1); j > -1; j-- ){
+                        if( remain <= 0 ) break;
+                        if( deliveries[j] > 0  ){
+                            int tmp = remain;
+                            remain -= deliveries[j];
+                            deliveries[j] -= tmp;
+                        }
+                    }
+
+                    System.out.println("배달: " + Arrays.toString(deliveries));
+                    break;
+
+                }
+                else if( i == 0 ) finishDelivery = true;
+            }
+
+            for( int i = pickupIndex; i > -1; i-- ){ // 택배 픽업
+                if( pickups[i] > 0 ){
+                    System.out.println("택배 픽업 i: " + i );
+                    pickupIndex = i;
+
+                    int remain = cap;
+                    remain -= pickups[i];
+                    pickups[i] -= cap;
+
+                    for( int j = (i-1); j > -1; j-- ){
+                        if( remain <= 0 ) break;
+                        if( pickups[j] > 0  ){
+                            int tmp = remain;
+                            remain -= pickups[j];
+                            pickups[j] -= tmp;
+                        }
+                    }
+                    System.out.println("픽업: " + Arrays.toString(pickups));
+                    break;
+                }
+                else if( i == 0 ) finishPickup = true;
+            }
+
+            if( finishDelivery && finishPickup ) break;
+            distance += ( ( Math.max( pickupIndex, deliveryIndex ) + 1 )* 2 );
+            System.out.println("이번에 간 거리: "+ ( Math.max( pickupIndex, deliveryIndex ) + 1 )* 2 );
+
+        }
+
+        return distance;
+    }
+
+}
