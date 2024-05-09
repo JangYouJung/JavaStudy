@@ -1,0 +1,69 @@
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
+
+public class Main {
+
+    static int T;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+        T = Integer.parseInt(bf.readLine());
+
+        for( int i = 0; i<T; i++ ){
+            String s = bf.readLine();
+
+            int N = Integer.parseInt(bf.readLine());
+
+            if( N == 0 ){
+                if(s.contains("D")) System.out.println("error");
+                else System.out.println("[]");
+                continue;
+            }
+
+            ArrayList<Integer> list = new ArrayList<>();
+
+            String input = bf.readLine();
+
+            for( int j = 1; j < input.length(); j++ ){
+                StringBuilder number = new StringBuilder();
+
+                while(true){
+                    if( input.charAt(j) == ',' || input.charAt(j)==']') break;
+                    else number.append(input.charAt(j));
+                    j++;
+                }
+
+                list.add( Integer.parseInt(number.toString()));
+            }
+
+            boolean error = false;
+
+            for( int j = 0; j<s.length(); j++ ){
+                if( s.charAt(j)=='R'){ // 뒤집기
+                    Collections.reverse(list);
+                }
+                else{
+                    if( list.isEmpty() ) error = true;
+                    else {
+                        list.remove(0);
+                    }
+                }
+            }
+
+            if(error) System.out.println("error");
+            else{
+                System.out.print("[");
+                for( int j = 0; j<list.size(); j++ ){
+                    System.out.print(list.get(j));
+                    if( j != list.size()-1 ) System.out.print("," );
+                }
+                System.out.println("]");
+            }
+
+        }
+
+    }// end of main
+
+}// end of class
