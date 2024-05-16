@@ -1,0 +1,35 @@
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
+
+public class Main {
+    static int N;
+    static int[] wine;
+
+    static int[] liter;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+        N = Integer.parseInt(bf.readLine());
+        wine = new int[N];
+        liter = new int[N];
+
+        for( int i = 0; i < N; i++ ){
+            wine[i] = Integer.parseInt(bf.readLine());
+        }
+
+        dp( 0, 0);
+
+    }// end of main
+
+    static int dp( int index, int count ){
+        if( count == 3 ) return 0;
+        if( index == N - 1 ) return 1;
+
+        return liter[index] =  Math.max( dp(index+1, count+1), dp(index+1,count+1) + wine[index] );
+
+    }
+
+
+}// end of class
