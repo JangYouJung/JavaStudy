@@ -1,0 +1,127 @@
+import java.util.*;
+
+class Solution {
+
+    public int[] solution(int[][] edges) {
+
+        Map<Integer,Integer> directedNodes = new HashMap<>(); // 노드 번호와 해당 노드를 향하는 간선 수 저장
+        Map<Integer,Integer> startingNodes = new HashMap<>(); // 노드 번호와 해당 노드에서 시작하는 간선 수 저장
+        boolean[] visited = new boolean[edges.length];
+
+        int doughnut_cnt = 0;
+        int stick_cnt = 0;
+        int figure8_cnt = 0;
+
+
+        for( int i = 0; i < edges.length; i++ ){
+            int from = edges[i][0];
+            int to = edges[i][1];
+
+            // 노드 맵에 삽입
+            if( startingNodes.containsKey(from)){
+                startingNodes.replace(from,startingNodes.get(from)+1);
+            }
+            else startingNodes.put(from,1);
+
+            if( !startingNodes.containsKey(to)){
+                startingNodes.put(to,0);
+            }
+
+            if( directedNodes.containsKey(to)){
+                directedNodes.replace(to,directedNodes.get(to)+1);
+            }
+            else directedNodes.put(to,1);
+
+            if( !directedNodes.containsKey(from)){
+                directedNodes.put(from,0);
+            }
+
+        }
+
+        System.out.println(startingNodes.toString());
+        System.out.println(directedNodes.toString());
+
+        int extraNode = 0;
+        Queue<Integer> centerOfFigure8 = new LinkedList<>();
+
+        // 추가한 노드 찾기 & 8자 그래프의 중심 탐색
+        for( int i = 1; i < directedNodes.size()+1; i++ ){
+            if( directedNodes.get(i)==0 && startingNodes.get(i) != 1 ){
+                 extraNode = i; // 추가한 노드 발견
+            }
+            else if( startingNodes.get(i) != 1 ){
+                centerOfFigure8.offer(i);
+            }
+        }
+        System.out.println(extraNode);
+
+
+        // 8자 그래프부터 탐색
+        while(!centerOfFigure8.isEmpty()){
+            int center = centerOfFigure8.poll();
+            figure8_cnt++;
+
+            for( int i = 0; i < edges.length; i++){
+                if( edges[i][0] == center ){
+                    visited[i] = true;
+                    int to = edges[i][1]; // 1
+
+                    // 그래프 탐색
+                    for( int j = 0; j < edges.length; j++ ){
+                        if( edges[j][0] == to ){
+                            visited[j] = true;
+                            to = edges[j][1];
+
+                            if( to == center ) break;
+                        }
+                    }
+                }
+            }
+        }
+
+        System.out.println(Arrays.toString(visited));
+
+
+        // 나머지 막대 그래프와 도넛 그래프 탐색
+        for( int i = 0; i < edges.length; i++ ){
+
+            if( edges[i][0] == extraNode || visited[i] ) continue;
+
+            // 그래프 탐색 시작 노드 체크
+            visited[i] = true;
+            int to = edges[i][1];
+
+            Set<Integer> graph = new HashSet<>();
+            graph.add(edges[i][0]);
+            graph.add(to);
+
+            // 본인을 가리키는 막대그래프
+            if(edges[i][0] == to) {
+                doughnut_cnt++;
+                continue;
+            }
+
+            for( int j = 0 ; j < edges.length; j++ ){
+
+                if( edges[j][0] == to && !visited[j] ){ // 다음 노드 발견
+                    visited[j] = true;
+                    to = edges[j][1];
+
+                    // 순환성 있는지 확인
+                    if(graph.contains(to)){ // 순환 발견
+                        doughnut_cnt++;
+                        break;
+                    }
+                    else graph.add(to);
+
+                }
+
+                else if( j == edges.length -1 ){ // 막대 그래프
+                    stick_cnt++;
+                }
+            }
+        }
+
+        return new int[]{ extraNode, doughnut_cnt, stick_cnt, figure8_cnt };
+    }
+}
