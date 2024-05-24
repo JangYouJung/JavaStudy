@@ -1,0 +1,68 @@
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
+
+public class Main {
+    static int L;
+    static int C;
+    static char[] alphabets;
+    static char[] password;
+    static StringBuilder stringBuilder = new StringBuilder();
+    static boolean[] visited;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(bf.readLine(), " ");
+
+        L = Integer.parseInt(st.nextToken());
+        C = Integer.parseInt(st.nextToken());
+        alphabets = new char[C];
+        visited = new boolean[C];
+        password = new char[L];
+
+        st = new StringTokenizer(bf.readLine(), " ");
+        for( int i = 0; i < C; i++ ){
+            alphabets[i] = st.nextToken().charAt(0);
+        }
+
+        for( int i = 0; i < C; i++ ){ // 알파벳 순으로 정렬
+            for( int j = i; j < C; j++ ){
+                if( alphabets[i] > alphabets[j] ){
+                    char tmp = alphabets[i];
+                    alphabets[i] = alphabets[j];
+                    alphabets[j] = tmp;
+                }
+            }
+        }
+
+        MakePassWord(0,0);
+
+
+    }// end of main
+
+    public static void MakePassWord(int count, int index){
+
+        if( count == L ){
+            //System.out.println(Arrays.toString(password));
+            System.out.println(stringBuilder);
+            return;
+        }
+
+        for( int i = index; i < C; i++ ){
+            if(!visited[i]){
+                visited[i] = true;
+                stringBuilder.append(alphabets[i]);
+
+                MakePassWord(count+1, index+1);
+
+                stringBuilder.deleteCharAt(stringBuilder.length()-1);
+                visited[i] = false;
+            }
+            //password[count] = alphabets[i];
+
+        }
+    }
+
+
+}// end of class
