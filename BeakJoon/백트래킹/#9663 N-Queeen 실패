@@ -1,0 +1,72 @@
+
+import java.io.*;
+import java.util.*;
+
+class Main {
+    static int N;
+    static int[][] board;
+    //static boolean[][] visited;
+    static Queue<int[]> queens = new LinkedList<>();
+
+    static int answer = 0;
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        N = Integer.parseInt(br.readLine());
+        board = new int[N][N];
+        //visited = new boolean[N][N];
+
+        placeTheQueen(0,0,0);
+
+        System.out.println(answer);
+
+    }
+
+    static void placeTheQueen( int count, int startI, int startJ ){
+        if( count == N ){
+            checkIfCanAttack();
+            return;
+        }
+
+        for( int i = startI; i < N; i++ ){
+            for( int j = startJ; j < N; j++ ){
+                if( board[i][j] == 0 ) {
+                    board[i][j] = 1;
+                    queens.offer(new int[]{i,j});
+                    placeTheQueen(count + 1, i, j+1);
+                    board[i][j] = 0;
+                }
+
+            }
+        }
+    }
+
+    static void checkIfCanAttack(){
+        while( !queens.isEmpty() ){
+            int[] queen = queens.poll();
+
+            for( int i = 0; i < N; i++ ){
+                for( int j = 0; j < N; j++ ){
+                    if( board[i][j] == 1 ){
+                        if( i == queen[0] && j == queen[1]) continue;
+                        if(queen[0] == i || queen[1] == j || Math.abs(queen[0]-i) == Math.abs(queen[1]-j)){
+
+                            for( int x = 0; x < N; x++ ){
+                                for( int y = 0; y < N; y++ ){
+                                    System.out.print(board[x][y] + " ");
+                                }
+                                System.out.println();
+                            }
+
+                            System.out.println("queen: " + Arrays.toString(queen));
+                            System.out.println("attacked: " + i + " " + j);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        answer++;
+    }
+}
+
